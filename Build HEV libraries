@@ -1,4 +1,4 @@
-name: Build HEV libraries
+name: .github/workflows/build-hev.yml
 
 on:
   workflow_dispatch:
