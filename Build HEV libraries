@@ -1,0 +1,39 @@
+name: Build HEV libraries
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source and submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android NDK
+        shell: bash
+        run: |
+          sdkmanager --install "ndk;29.0.14206865"
+          echo "NDK_HOME=$ANDROID_HOME/ndk/29.0.14206865" >> "$GITHUB_ENV"
+
+      - name: Build HEV libraries
+        shell: bash
+        run: |
+          bash compile-hevtun.sh
+          test -s libs/arm64-v8a/libhev-socks5-tunnel.so
+
+      - name: Upload ARM64 libraries
+        uses: actions/upload-artifact@v4
+        with:
+          name: hev-arm64-v8a
+          path: libs/arm64-v8a/*.so
+          if-no-files-found: error
