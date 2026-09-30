@@ -17,7 +17,7 @@ jobs:
         with:
           submodules: recursive
 
-          - name: Initialize and check submodules
+      - name: Initialize and check submodules
         run: |
           git submodule sync --recursive
           git submodule update --init --recursive
