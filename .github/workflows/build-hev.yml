@@ -36,9 +36,17 @@ jobs:
           sdkmanager --install "ndk;29.0.14206865"
           echo "NDK_HOME=$ANDROID_HOME/ndk/29.0.14206865" >> "$GITHUB_ENV"
 
+      - name: Download HEV source and dependencies
+        run: |
+          git clone --recursive https://github.com/heiher/hev-socks5-tunnel.git hev-socks5-tunnel
+          test -f hev-socks5-tunnel/Android.mk
+          test -f hev-socks5-tunnel/third-part/yaml/Android.mk
+          test -f hev-socks5-tunnel/third-part/lwip/Android.mk
+          test -f hev-socks5-tunnel/third-part/hev-task-system/Android.mk
+          
       - name: Build HEV libraries
         shell: bash
-        run: |
+        run:
           bash compile-hevtun.sh
           test -s libs/arm64-v8a/libhev-socks5-tunnel.so
 
